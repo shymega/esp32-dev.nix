@@ -1,0 +1,19 @@
+name: "Test"
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest ] # FIXE: Add Darwin support
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: "main"
+      - uses: cachix/install-nix-action@V27
+      - run: nix flake check --all-systems 
+      - run: nix build .#packages.x86_64-linux.allPackages
