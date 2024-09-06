@@ -12,8 +12,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: "main"
       - uses: cachix/install-nix-action@V27
-      - run: nix flake check --all-systems 
-      - run: nix build .#packages.x86_64-linux.allPackages
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+      - run: nix flake check --all-systems
+      - run: nix build .#packages.x86_64-linux.allPackages 

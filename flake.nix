@@ -6,20 +6,12 @@
       url = "github:nix-community/fenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    crane = {
-      url = "github:ipetkov/crane";
-      inputs.nixpkgs.follows = "nixpkgs";
-      # inputs.flake-compat.follows = "flake-compat";
-      # inputs.utils.follows = "utils";
-    };
+    crane.url = "github:ipetkov/crane";
   };
   outputs = { self, ... }@inputs:
     inputs.flake-utils.lib.eachSystem [ "x86_64-linux" ]
       (system:
         let
-          inherit (builtins) fetchTarball;
-          lib = pkgs.lib;
           pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [ inputs.fenix.overlays.default ];
@@ -27,20 +19,22 @@
               allowBroken = true;
             };
           };
+          inherit (pkgs.stdenv) mkDerivation;
+          inherit (pkgs) fetchzip;
 
           rust-esp-version = "1.80.0.0";
 
-          rust-esp-toolchain-src = fetchTarball {
+          rust-esp-toolchain-src = fetchzip {
             url = "https://github.com/esp-rs/rust-build/releases/download/v${rust-esp-version}/rust-src-${rust-esp-version}.tar.xz";
-            sha256 = "0pq5ik1114zydjfyifh2rsbvzqz4c9v75s97mmm5khvm40vx8wws";
+            sha256 = "sha256-mnPUNyB1w1lqrSfpcnZi5OO/l84CuuidbP6TEMKMBV8=";
           };
 
-          rust-esp-toolchain-bin = fetchTarball {
+          rust-esp-toolchain-bin = fetchzip {
             url = "https://github.com/esp-rs/rust-build/releases/download/v${rust-esp-version}/rust-${rust-esp-version}-x86_64-unknown-linux-gnu.tar.xz";
-            sha256 = "0pwm58ka1fcci3id0axyifr4a84f7m7x2yggv1v07k754iffsknb";
+            sha256 = "sha256-y07tXCTlzAN22O950U89jiBFsou+K9DiiIy5oCYqlV8=";
           };
 
-          esp-toolchain = pkgs.stdenv.mkDerivation {
+          esp-toolchain = mkDerivation {
             name = "esp-toolchain";
 
             # Skip src requirement
@@ -69,12 +63,12 @@
           };
 
 
-          xtensa-esp32-elf-clang = pkgs.stdenv.mkDerivation {
+          xtensa-esp32-elf-clang = mkDerivation {
             name = "xtensa-esp32-elf-clang";
 
-            src = fetchTarball {
+            src = fetchzip {
               url = "https://github.com/espressif/llvm-project/releases/download/esp-16.0.0-20230516/libs_llvm-esp-16.0.0-20230516-linux-amd64.tar.xz";
-              sha256 = "15zkdvn495afkk690rsxwnmjqjbpw1cjz0rbvnqqyz3r0r2h3lsg";
+              sha256 = "sha256-T9MBRQZ5fI+x3SuDL1ngd0ksq+VdZ5DMnE6VROxu85c=";
             };
 
             buildInputs = [
