@@ -27,9 +27,12 @@
     };
     crane.url = "github:ipetkov/crane";
   };
-  outputs = inputs:
-    inputs.snowfall-lib.mkFlake {
-      inherit inputs;
+  outputs = inputs: let
+    supportedSystems = [
+        "x86_64-linux"
+      ];
+    in inputs.snowfall-lib.mkFlake {
+      inherit inputs supportedSystems;
       src = ./.;
 
       overlays = with inputs; [
