@@ -42,7 +42,7 @@ in
     passthru.update = writeShellScriptBin "update-my-package" ''
       set -euo pipefail
 
-      latest="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/${src.owner}/${src.repo}/releases?per_page=1" | ${pkgs.jq}/bin/jq -r ".[0].tag_name" | ${pkgs.gnused}/bin/sed 's/^v//')"
+      latest="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/${owner}/${name}/releases?per_page=1" | ${pkgs.jq}/bin/jq -r ".[0].tag_name" | ${pkgs.gnused}/bin/sed 's/^v//')"
 
       drift rewrite --auto-hash --new-version "$latest"
     '';
