@@ -1,6 +1,6 @@
 # esp32-dev.nix
 
-Unified flake for the ESP32 tooclchain, with Rust suppport.
+Unified flake for the ESP32 toolchain, with Rust suppport.
 
 ## Attributions
 
