@@ -14,8 +14,8 @@
 }: let
   name = "openocd-esp32";
   owner = "espressif";
-  version = "0.11.0-esp32-20220706";
-  hash = "sha256-2t9+XRU3BT2QUSGqUBKjvozIHruFk0RTxIwRs9dPbG4=";
+  version = "0.12.0-esp32-20241016";
+  sha256 = "sroUQw8yfAidKPk0oCoprEGqMnCJZwHrrvH9pAOITTI=";
   arch = "amd64";
 in
   stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ in
 
     src = fetchzip {
       url = "https://github.com/${owner}/${name}/releases/download/v${version}/${name}-linux-${arch}-${version}.tar.gz";
-      inherit hash;
+      inherit sha256;
     };
 
     buildInputs = [
