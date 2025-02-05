@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, crosstool-ng-xtensa, wget, which, autoconf, libtool, automake, texinfo, python3Packages, file }:
-
+{
+  stdenv,
+  fetchFromGitHub,
+  crosstool-ng-xtensa,
+  wget,
+  which,
+  autoconf,
+  libtool,
+  automake,
+  texinfo,
+  python3Packages,
+  file,
+}:
 stdenv.mkDerivation rec {
   name = "gcc-${targetTriple}";
   targetTriple = "xtensa-lx106-elf";
@@ -26,23 +37,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-
   ];
 
-  phases = [ "configurePhase" "buildPhase" ];
+  phases = ["configurePhase" "buildPhase"];
 
   # https://github.com/jcmvbkbc/crosstool-NG/issues/48
-  hardeningDisable = [ "format" ];
+  hardeningDisable = ["format"];
 
   configurePhase = ''
     ${crosstool-ng-xtensa}/bin/ct-ng ${targetTriple}
-    
+
     cat ${crosstool-config-overrides} >> .config
 
     # Put toolchain in $out.
     sed -r -i.org "s%CT_PREFIX_DIR=.*%CT_PREFIX_DIR=\"$out\"%" .config
 
-    # Don't make toolchain read-only, so we can install libhal. Nix will take 
+    # Don't make toolchain read-only, so we can install libhal. Nix will take
     # care of making it read-only anyway.
     sed -r -i "s%CT_INSTALL_DIR_RO=y%CT_INSTALL_DIR_RO=n%" .config
 

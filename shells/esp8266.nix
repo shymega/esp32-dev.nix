@@ -1,5 +1,4 @@
-{ pkgs ? import ../default.nix }:
-
+{pkgs ? import ../default.nix}:
 pkgs.mkShell {
   name = "esp8266";
 

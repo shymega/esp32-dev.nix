@@ -1,33 +1,33 @@
 # Define component derivations and special treatments.
-{ lib
-, stdenv
-, stdenvNoCC
-, gnutar
-, autoPatchelfHook
-, bintools
-, zlib
-, gccForLibs
-, toRustTarget
-, removeNulls
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  gnutar,
+  autoPatchelfHook,
+  bintools,
+  zlib,
+  gccForLibs,
+  toRustTarget,
+  removeNulls,
 }:
 # Release version of the whole set.
-{ version
+{
+  version,
   # The host platform of this set.
-, platform
+  platform,
   # Set of pname -> src
-, srcs
+  srcs,
   # { clippy.to = "clippy-preview"; }
-, renames
-}:
-let
+  renames,
+}: let
   inherit (lib) elem mapAttrs optional optionalString;
   inherit (stdenv) hostPlatform;
 
-  mkComponent = pname: src:
-    let
-      # These components link to `librustc_driver*.so` or `libLLVM*.so`.
-      linksToRustc = elem pname [ "clippy-preview" "rls-preview" "miri-preview" "rustc-dev" "rustfmt-preview" ];
-    in
+  mkComponent = pname: src: let
+    # These components link to `librustc_driver*.so` or `libLLVM*.so`.
+    linksToRustc = elem pname ["clippy-preview" "rls-preview" "miri-preview" "rustc-dev" "rustfmt-preview"];
+  in
     stdenvNoCC.mkDerivation rec {
       inherit pname version src;
       name = "${pname}-${version}-${platform}";
@@ -38,15 +38,18 @@ let
       # entire unpacked contents after just a little twiddling.
       preferLocalBuild = true;
 
-      nativeBuildInputs = [ gnutar ] ++
+      nativeBuildInputs =
+        [gnutar]
+        ++
         # Darwin doesn't use ELF, and they usually just work due to relative RPATH.
-        optional (!dontFixup && !hostPlatform.isDarwin) autoPatchelfHook ++
+        optional (!dontFixup && !hostPlatform.isDarwin) autoPatchelfHook
+        ++
         # For `install_name_tool`.
         optional (hostPlatform.isDarwin && linksToRustc) bintools;
 
       buildInputs =
-        optional (elem pname [ "rustc" "cargo" "llvm-tools-preview" "rust" ]) zlib ++
-        optional linksToRustc self.rustc;
+        optional (elem pname ["rustc" "cargo" "llvm-tools-preview" "rust"]) zlib
+        ++ optional linksToRustc self.rustc;
 
       # Nightly `rustc` since 2022-02-17 links to `libstdc++.so.6` on Linux.
       # https://github.com/oxalica/rust-overlay/issues/73
@@ -90,7 +93,7 @@ let
       '';
 
       # Only contain tons of html files. Don't waste time scanning files.
-      dontFixup = elem pname [ "rust-docs" "rustc-docs" ];
+      dontFixup = elem pname ["rust-docs" "rustc-docs"];
 
       # Darwin binaries usually just work... except for these linking to rustc from another drv.
       postFixup = optionalString (hostPlatform.isDarwin && linksToRustc) ''
@@ -103,9 +106,8 @@ let
     };
 
   self = mapAttrs mkComponent srcs;
-
 in
-removeNulls (
-  self //
-  mapAttrs (alias: { to }: self.${to} or null) renames
-)
+  removeNulls (
+    self
+    // mapAttrs (alias: {to}: self.${to} or null) renames
+  )

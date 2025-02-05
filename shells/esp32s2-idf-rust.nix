@@ -1,4 +1,4 @@
-{ pkgs ? import ../default.nix }:
+{pkgs ? import ../default.nix}:
 pkgs.mkShell {
   name = "esp-idf";
 
@@ -38,7 +38,7 @@ pkgs.mkShell {
   shellHook = ''
     # fixes libstdc++ issues and libgl.so issues
     # export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${pkgs.stdenv.cc.cc.lib}/lib/:${pkgs.zlib}/lib:${pkgs.pkgsi686Linux.libxml2.dev}/lib
-    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [ pkgs.libxml2 pkgs.zlib pkgs.stdenv.cc.cc.lib ]}
+    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.libxml2 pkgs.zlib pkgs.stdenv.cc.cc.lib]}
     export ESP_IDF_VERSION=v4.4.1
     # export LIBCLANG_PATH=${pkgs.llvmPackages.libclang.lib}/lib
     export LIBCLANG_PATH=${pkgs.llvm-xtensa}/lib

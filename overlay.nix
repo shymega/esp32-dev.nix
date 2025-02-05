@@ -1,6 +1,5 @@
-final: prev:
-rec {
-  esp-idf-full = prev.callPackage ./pkgs/esp-idf { };
+final: prev: rec {
+  esp-idf-full = prev.callPackage ./pkgs/esp-idf {};
 
   esp-idf-esp32 = esp-idf-full.override {
     toolsToInclude = [
@@ -44,18 +43,19 @@ rec {
   esp-idf-esp32h2 = esp-idf-riscv;
 
   # ESP8266
-  gcc-xtensa-lx106-elf-bin = prev.callPackage ./pkgs/esp8266-rtos-sdk/esp8266-toolchain-bin.nix { };
-  esp8266-rtos-sdk = prev.callPackage ./pkgs/esp8266-rtos-sdk/esp8266-rtos-sdk.nix { };
+  gcc-xtensa-lx106-elf-bin = prev.callPackage ./pkgs/esp8266-rtos-sdk/esp8266-toolchain-bin.nix {};
+  esp8266-rtos-sdk = prev.callPackage ./pkgs/esp8266-rtos-sdk/esp8266-rtos-sdk.nix {};
 
   esp-idf = esp-idf-full;
 
-  llvm-xtensa = prev.callPackage ./pkgs/llvm-xtensa-bin.nix { };
+  llvm-xtensa = prev.callPackage ./pkgs/llvm-xtensa-bin.nix {};
 
   # Rust
-  rust-esp = prev.callPackage ./pkgs/rust-esp.nix { inherit prev; };
-  rust-src-esp = prev.callPackage ./pkgs/rust-src-esp.nix { inherit prev; };
+  rust-esp = prev.callPackage ./pkgs/rust-esp.nix {inherit prev;};
+  rust-src-esp = prev.callPackage ./pkgs/rust-src-esp.nix {inherit prev;};
 
-  esp-idf-esp32-with-clang = final.esp-idf-full.override
+  esp-idf-esp32-with-clang =
+    final.esp-idf-full.override
     {
       toolsToInclude = [
         "esp-clang"

@@ -1,20 +1,20 @@
-{ stdenv
-, fetchFromGitHub
-, fetchurl
-, which
-, autoconf
-, libtool
-, automake
-, gperf
-, bison
-, flex
-, texinfo
-, wget
-, help2man
-, ncurses
-, python3Packages
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  which,
+  autoconf,
+  libtool,
+  automake,
+  gperf,
+  bison,
+  flex,
+  texinfo,
+  wget,
+  help2man,
+  ncurses,
+  python3Packages,
 }:
-
 stdenv.mkDerivation rec {
   name = "crosstool-ng-xtensa";
 
