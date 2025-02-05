@@ -34,13 +34,7 @@ in
 
     phases = ["unpackPhase" "installPhase"];
 
-    installPhase = let
-      env = buildFHSUserEnv {
-        name = "esp32-openocd-env";
-        targetPkgs = pkgs: with pkgs; [zlib libusb1];
-        runScript = "";
-      };
-    in ''
+    installPhase = ''
       cp -r . $out
       autoPatchelf $out/bin/openocd
     '';
