@@ -12,7 +12,7 @@ with pkgs; let
   repo = "crosstool-ng";
   pname = "crosstool-ng-xtensa";
   version = "esp-14.2.0_20241119";
-  sha256 = "sha256-hRTq5AMODVlRygriGymQQ547KnK5yW4tqxqttaE19S8=";
+  sha256 = "hRTq5AMODVlRygriGymQQ547KnK5yW4tqxqttaE19S8=";
 in
   stdenv.mkDerivation rec {
     inherit pname version;
