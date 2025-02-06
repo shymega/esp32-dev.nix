@@ -43,10 +43,14 @@ in
 
     preConfigure = "bash ./bootstrap";
 
-    passthru.update = writeShellScriptBin "update-my-package" ''
+    passthru.update = let
+      inherit (lib) getExe;
+      curl = getExe pkgs.curl;
+      jq = getExe pkgs.jq;
+    in writeShellScriptBin "update-my-package" ''
       set -euo pipefail
 
-      latest="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/${owner}/${pname}/releases?per_page=1" | ${pkgs.jq}/bin/jq -r ".[0].tag_name")"
+      latest="$(${curl} -s "https://api.github.com/repos/${owner}/${repo}/releases?per_page=1" | ${jq} -r ".[0].tag_name")"
 
       drift rewrite --auto-hash --new-version "$latest"
     '';
