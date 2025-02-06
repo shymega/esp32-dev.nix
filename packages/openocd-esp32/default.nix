@@ -39,10 +39,15 @@ in
       autoPatchelf $out/bin/openocd
     '';
 
-    passthru.update = writeShellScriptBin "update-my-package" ''
+    passthru.update = let
+      inherit (lib) getExe;
+      curl = getExe pkgs.curl;
+      jq = getExe pkgs.jq;
+      sed = getExe pkgs.gnused;
+    in writeShellScriptBin "update-my-package" ''
       set -euo pipefail
 
-      latest="$(${pkgs.curl}/bin/curl -s "https://api.github.com/repos/${owner}/${name}/releases?per_page=1" | ${pkgs.jq}/bin/jq -r ".[0].tag_name" | ${pkgs.gnused}/bin/sed 's/^v//')"
+      latest="$(${curl} -s "https://api.github.com/repos/${owner}/${name}/releases?per_page=1" | ${jq} -r ".[0].tag_name" | ${sed} 's/^v//')"
 
       drift rewrite --auto-hash --new-version "$latest"
     '';
