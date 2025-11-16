@@ -1,4 +1,4 @@
-{ zlib, autoreconfHook, openocd, fetchFromGitHub, ... }:
+{ nix-update-script, zlib, autoreconfHook, openocd, fetchFromGitHub, ... }:
 openocd.overrideAttrs (finalAttrs: prevAttrs: {
   version = "0.12.0-esp32-20250707";
   src = fetchFromGitHub {
@@ -15,4 +15,6 @@ openocd.overrideAttrs (finalAttrs: prevAttrs: {
   buildInputs = (prevAttrs.buildInputs or []) ++ [
     zlib
   ];
+
+  passthru.updateScript = nix-update-script {};
 })
