@@ -11,14 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "crosstool-ng-xtensa";
-  version = "esp-14.2.0_20241119";
+  version = "esp-15.2.0_20250929";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "crosstool-ng";
-    sha256 = "hRTq5AMODVlRygriGymQQ547KnK5yW4tqxqttaE19S8=";
     tag = finalAttrs.version;
-    leaveDotGit = true;
+    hash = "sha256-JMFkhZGVoeZdSryFFYzzM3p+13nRhP0PQrG3ZPF0Nmo=";
   };
 
   nativeBuildInputs = with pkgs; [
